@@ -2,28 +2,34 @@ class Api::V1::ImagesController < ApplicationController
   require "image_processing/mini_magick"
 
   def create
-    # build new image
+    # build new image object
     @image = Image.new
-    @image.fullsized_image.attach(params[:image])
 
-    # create thumbnail too
-    thumbnail = ImageProcessing::MiniMagick
-      .source(params[:image].tempfile.path)
-      .resize_to_limit(400, 400)
-      .call
+    if params[:image]
+      # attach the image to the image object
+      @image.image.attach(params[:image])
 
-    filename = params[:image].original_filename
-    thumbnail_filename = filename.insert(filename.index('.'), '_thumb')
-    @image.thumbnail_image.attach(io: thumbnail, filename: thumbnail_filename)
+      # create and attach a thumbnail too
+      thumbnail = ImageProcessing::MiniMagick
+        .source(params[:image].tempfile.path)
+        .resize_to_limit(400, 400)
+        .call
+
+      filename = params[:image].original_filename
+      thumbnail_filename = filename.insert(filename.index('.'), '_thumb')
+      @image.thumbnail.attach(io: thumbnail, filename: thumbnail_filename)
+    end
     
     if @image.save
       render json: {
         id: @image.id,
-        fullsized_image_url: url_for(@image.fullsized_image),
-        thumbnail_image_url: url_for(@image.thumbnail_image),
+        image_url: url_for(@image.image),
+        thumbnai_url: url_for(@image.thumbnail),
         created_at: @image.created_at,
         updated_at: @image.updated_at,
       }, status: :created
+    else
+      render json: @image.errors.full_messages, status: :unprocessable_entity
     end
   end
 
