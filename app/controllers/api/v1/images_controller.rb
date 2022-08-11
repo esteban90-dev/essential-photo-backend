@@ -1,6 +1,8 @@
 class Api::V1::ImagesController < ApplicationController
   require "image_processing/mini_magick"
 
+  before_action :authenticate_api_v1_admin!
+
   def create
     # build new image object
     @image = Image.new
