@@ -26,7 +26,7 @@ class Api::V1::ImagesController < ApplicationController
       render json: {
         id: @image.id,
         image_url: url_for(@image.image),
-        thumbnai_url: url_for(@image.thumbnail),
+        thumbnail_url: url_for(@image.thumbnail),
         created_at: @image.created_at,
         updated_at: @image.updated_at,
       }, status: :created
