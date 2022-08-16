@@ -30,6 +30,8 @@ gem 'rack-cors'
 
 gem 'devise_token_auth', '~> 1.2'
 gem 'net-smtp'
+gem "image_processing", "~> 1.0"
+gem 'active_storage_validations'
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.4.4', require: false
