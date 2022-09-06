@@ -1,7 +1,13 @@
 class Api::V1::ImagesController < ApplicationController
   require "image_processing/mini_magick"
 
-  before_action :authenticate_api_v1_admin!
+  before_action :authenticate_api_v1_admin!, except: :index
+
+  def index
+    @images = Image.all
+    formatted_images = @images.map{ |image| formatted_image(image) }
+    render json: formatted_images, status: :ok
+  end
 
   def create
     # build new image object
@@ -23,16 +29,21 @@ class Api::V1::ImagesController < ApplicationController
     end
     
     if @image.save
-      render json: {
-        id: @image.id,
-        image_url: url_for(@image.image),
-        thumbnail_url: url_for(@image.thumbnail),
-        created_at: @image.created_at,
-        updated_at: @image.updated_at,
-      }, status: :created
+      render json: formatted_image(@image), status: :created
     else
       render json: @image.errors.full_messages, status: :unprocessable_entity
     end
   end
 
+  private
+
+  def formatted_image(image)
+    return {
+      id: image.id,
+      image_url: url_for(image.image),
+      thumbnail_url: url_for(image.thumbnail),
+      created_at: image.created_at,
+      updated_at: image.updated_at,
+    }
+  end
 end
