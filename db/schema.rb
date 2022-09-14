@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_09_14_200257) do
+ActiveRecord::Schema.define(version: 2022_09_14_201042) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -69,8 +69,8 @@ ActiveRecord::Schema.define(version: 2022_09_14_200257) do
   end
 
   create_table "image_tags", force: :cascade do |t|
-    t.bigint "image_id"
-    t.bigint "tag_id"
+    t.bigint "image_id", null: false
+    t.bigint "tag_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["image_id"], name: "index_image_tags_on_image_id"
