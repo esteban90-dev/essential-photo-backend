@@ -5,4 +5,5 @@ class Image < ApplicationRecord
   has_many :tags, through: :image_tags
 
   validates :image, attached: true, content_type: [:png, :jpg, :jpeg]
+  validates :is_public, presence: true
 end
