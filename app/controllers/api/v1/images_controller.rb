@@ -45,9 +45,11 @@ class Api::V1::ImagesController < ApplicationController
     @image.description = params[:description]
     @image.is_public = params[:is_public]
 
-    # for each tag from request, if the tag exists then associate
-    # with the image, otherwise create a new tag
-    params[:tags].split(", ").each do |tag_name|
+    # expect tags to be separated by comma,
+    # and strip leading/trailing whitespace
+    params[:tags].split(",").map{|tag| tag.strip}.each do |tag_name|
+      # if the tag exists then associate
+      # with the image, otherwise create a new tag
       tag = Tag.find_by(name: tag_name)
       if tag
         @image.tags << tag
