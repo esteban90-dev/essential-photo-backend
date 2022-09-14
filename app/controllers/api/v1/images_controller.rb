@@ -4,7 +4,8 @@ class Api::V1::ImagesController < ApplicationController
   before_action :authenticate_api_v1_admin!, except: :index
 
   def index
-    @images = Image.all
+    # only return public images
+    @images = Image.where(is_public: true)
     formatted_images = @images.map{ |image| formatted_image(image) }
     render json: formatted_images, status: :ok
   end
