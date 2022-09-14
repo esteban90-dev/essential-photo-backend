@@ -14,6 +14,9 @@ class Api::V1::ImagesController < ApplicationController
     # build new image object
     @image = Image.new
 
+    # by default, make image publicly available
+    @image.is_public = true
+
     if params[:image]
       # attach the image to the image object
       @image.image.attach(params[:image])
