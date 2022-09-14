@@ -68,21 +68,21 @@ ActiveRecord::Schema.define(version: 2022_09_14_161956) do
     t.index ["uid", "provider"], name: "index_admins_on_uid_and_provider", unique: true
   end
 
+  create_table "image_tags", force: :cascade do |t|
+    t.bigint "image_id"
+    t.bigint "tag_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["image_id"], name: "index_image_tags_on_image_id"
+    t.index ["tag_id"], name: "index_image_tags_on_tag_id"
+  end
+
   create_table "images", force: :cascade do |t|
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "title"
     t.text "description"
     t.boolean "is_public"
-  end
-
-  create_table "images_tags_tables", force: :cascade do |t|
-    t.bigint "image_id"
-    t.bigint "tag_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["image_id"], name: "index_images_tags_tables_on_image_id"
-    t.index ["tag_id"], name: "index_images_tags_tables_on_tag_id"
   end
 
   create_table "tags", force: :cascade do |t|
