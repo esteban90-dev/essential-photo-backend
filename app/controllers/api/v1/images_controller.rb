@@ -87,6 +87,7 @@ class Api::V1::ImagesController < ApplicationController
       title: image.title,
       description: image.description,
       tags: image.tags,
+      is_public: image.is_public,
       image_url: url_for(image.image),
       thumbnail_url: url_for(image.thumbnail),
       created_at: image.created_at,
