@@ -4,8 +4,17 @@ class Api::V1::ImagesController < ApplicationController
   before_action :authenticate_api_v1_admin!, except: :index
 
   def index
-    # only return public images
-    @images = Image.where(is_public: true)
+    # if the admin is signed in and supplies the 'include_private=true' query 
+    # parameter, return all images, otherwise only return public images
+
+    if params[:include_private]
+      if api_v1_admin_signed_in? && params[:include_private] == 'true'
+        @images = Image.all
+      end
+    else 
+      @images = Image.where(is_public: true)
+    end
+
     formatted_images = @images.map{ |image| formatted_image(image) }
     render json: formatted_images, status: :ok
   end
