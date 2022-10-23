@@ -8,14 +8,12 @@ class Api::V1::ImagesController < ApplicationController
     # parameter, return all images (public and private)
     # otherwise, return only public images
 
+    @images = Image.where(is_public: true)
+
     if api_v1_admin_signed_in? && params[:include_private]
       if params[:include_private] == 'true'
         @images = Image.all
-      else
-        @images = Image.where(is_public: true)
       end
-    else
-      @images = Image.where(is_public: true)
     end
 
     formatted_images = @images.map{ |image| formatted_image(image) }
