@@ -5,13 +5,16 @@ class Api::V1::ImagesController < ApplicationController
 
   def index
     # if the admin is signed in and supplies the 'include_private=true' query 
-    # parameter, return all images, otherwise only return public images
+    # parameter, return all images (public and private)
+    # otherwise, return only public images
 
-    if params[:include_private]
-      if api_v1_admin_signed_in? && params[:include_private] == 'true'
+    if api_v1_admin_signed_in? && params[:include_private]
+      if params[:include_private] == 'true'
         @images = Image.all
+      else
+        @images = Image.where(is_public: true)
       end
-    else 
+    else
       @images = Image.where(is_public: true)
     end
 
