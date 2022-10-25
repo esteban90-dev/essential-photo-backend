@@ -16,6 +16,11 @@ class Api::V1::ImagesController < ApplicationController
       end
     end
 
+    if params[:tags]
+      tags_array = params[:tags].split(",").map{|tag| tag.strip}
+      @images = @images.tagged_with(tags_array)
+    end
+
     formatted_images = @images.map{ |image| formatted_image(image) }
     render json: formatted_images, status: :ok
   end

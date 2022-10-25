@@ -6,4 +6,17 @@ class Image < ApplicationRecord
 
   validates :image, attached: true, content_type: [:png, :jpg, :jpeg]
   validates :is_public, inclusion: [true, false]
+
+  # return images that have all supplied tags
+  scope :tagged_with, ->(tags) do
+    select('*')
+    .where(id: 
+      select(:id)
+      .joins(:tags)
+      .where(tags: {name: tags})
+      .group(:id)
+      .having("COUNT(*) = ?", tags.length)
+      .pluck(:id)
+    )
+  end
 end
